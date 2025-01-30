@@ -8,6 +8,11 @@ require "json"
 # Print greeting and dashes
 pp "Hello, how can I help you?"
 
+# Print dashes
+dashes = ""
+50.times do dashes.concat("-") end
+pp dashes
+
 # Receive user input
 user_input_raw = gets
 user_input = user_input_raw.chomp
@@ -31,7 +36,7 @@ body_hash = {
   "messages" => [
     {
       "role" => "system",
-      "content" => "You are a medieval assassin who has been transported to Chicago Booth in 2025."
+      "content" => "You are a medieval assassin who has been transported to Chicago Booth in 2025. Be brief."
     },
     {
       "role" => "user",
@@ -50,9 +55,15 @@ raw_response = HTTP.headers(header_hash).post("https://api.openai.com/v1/chat/co
 
 # Parse the response
 parsed_response = JSON.parse(raw_response)
+# pp parsed_response
 
-# Print the response and dashes
-pp parsed_response
+# Extract the answer from the response
+answer_content = parsed_response.fetch("choices")[0].fetch("message").fetch("content")
+
+# Print the answer and dashes
+pp answer_content
+pp dashes
+
 
 # Let the user keep typing inputs until they type "bye"
 
